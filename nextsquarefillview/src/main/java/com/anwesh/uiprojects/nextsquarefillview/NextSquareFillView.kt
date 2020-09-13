@@ -207,4 +207,13 @@ class NextSquareFillView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : NextSquareFillView {
+            val view : NextSquareFillView = NextSquareFillView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }

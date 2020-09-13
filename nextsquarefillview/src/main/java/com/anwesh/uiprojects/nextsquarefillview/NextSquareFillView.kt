@@ -30,3 +30,28 @@ fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
+
+fun Canvas.drawNextSquareFill(scale : Float, w : Float, h : Float, paint : Paint) {
+    val sf : Float = scale.sinify()
+    val sf1 : Float = sf.divideScale(0, parts)
+    val wGap : Float = w / parts
+    val hGap : Float = h / parts
+    drawRect(RectF(0f, 0f, wGap * sf1, hGap * sf1), paint)
+    for (j in 1..(parts - 1)) {
+        val sfj : Float = sf.divideScale(j, parts)
+        val currW : Float = wGap * sfj
+        val currH : Float = hGap * sfj
+        save()
+        translate(wGap * j, hGap * j)
+        drawRect(RectF(-wGap + currW, -hGap + currH, 0f, 0f), paint)
+        drawRect(RectF(0f, 0f, currW, currH), paint)
+        restore()
+    }
+}
+
+fun Canvas.drawNSFNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    paint.color = colors[i]
+    drawNextSquareFill(scale, w, h, paint)
+}

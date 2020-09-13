@@ -182,4 +182,27 @@ class NextSquareFillView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : NextSquareFillView) {
+
+        private val animator : Animator = Animator(view)
+        private val nsf : NextSquareFill = NextSquareFill(0)
+        private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+        fun render(canvas : Canvas) {
+            canvas.drawColor(backColor)
+            nsf.draw(canvas, paint)
+            animator.animate {
+                nsf.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            nsf.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }

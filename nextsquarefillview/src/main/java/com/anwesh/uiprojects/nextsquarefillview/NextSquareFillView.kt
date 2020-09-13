@@ -20,7 +20,7 @@ val colors : Array<Int> = arrayOf(
         "#3F51B5",
         "#4CAF50"
 ).map({Color.parseColor(it)}).toTypedArray()
-val strokeFactor : Float = 90f
+
 val parts : Int = 5
 val scGap : Float = 0.02f / parts
 val delay : Long = 20
@@ -36,15 +36,20 @@ fun Canvas.drawNextSquareFill(scale : Float, w : Float, h : Float, paint : Paint
     val sf1 : Float = sf.divideScale(0, parts)
     val wGap : Float = w / parts
     val hGap : Float = h / parts
-    drawRect(RectF(0f, 0f, wGap * sf1, hGap * sf1), paint)
-    for (j in 1..(parts - 1)) {
+    for (j in 0..(parts - 1)) {
         val sfj : Float = sf.divideScale(j, parts)
         val currW : Float = wGap * sfj
         val currH : Float = hGap * sfj
+        var x : Float = 0f
+        var y : Float = 0f
+        if (j < parts - 1) {
+            val sfj1 : Float = sf.divideScale(j + 1, parts)
+            x = wGap * sfj1
+            y = hGap * sfj1
+        }
         save()
         translate(wGap * j, hGap * j)
-        drawRect(RectF(-wGap + currW, -hGap + currH, 0f, 0f), paint)
-        drawRect(RectF(0f, 0f, currW, currH), paint)
+        drawRect(RectF(x, y, currW, currH), paint)
         restore()
     }
 }
